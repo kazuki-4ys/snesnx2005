@@ -1,0 +1,7 @@
+build/
+nsp_stuff/exefs/main
+nsp_stuff/hacbrewpack_backup/
+nsp_stuff/hacbrewpack_nsp/
+*.elf
+*.nacp
+*.nro
