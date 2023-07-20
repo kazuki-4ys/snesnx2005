@@ -136,6 +136,8 @@ class S9XRunMenu : public ItemMenu{
         int16_t *mixSamplesBuffer = nullptr;
     protected:
         unsigned int s9xInput = 0;
+        TwoDTexQuad *bgLMesh = nullptr;
+        TwoDTexQuad *bgRMesh = nullptr;
         TwoDTexQuad *notAlreadyLoadROMBg = nullptr;
         TwoDDynamicTexQuad *s9xRenderer = nullptr;
         void runS9X1Fr(void);

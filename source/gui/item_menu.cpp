@@ -22,7 +22,7 @@ void setTwoDColorQuadScale(TwoDTexQuad *t, unsigned int x, unsigned int y){
     t->scaleY = (float)y / SCREEN_H;
 }
 
-void setTwoDColorQuadPosAndScale(TwoDTexQuad *t, unsigned int x, unsigned int y, unsigned int w, unsigned int h){
+void setTwoDColorQuadPosAndScale(TwoDTexQuad *t, int x, int y, unsigned int w, unsigned int h){
     t->scaleX = (float)w / SCREEN_W;
     t->scaleY = (float)h / SCREEN_H;
     t->posX = ((x / (float)SCREEN_W) + (w / (float)SCREEN_W) / 2) * 2.0f - 1.0f;
@@ -69,8 +69,15 @@ ItemMenu::~ItemMenu(void){
 }
 
 S9XRunMenu::S9XRunMenu(App *a) : ItemMenu(a){
+    bgLMesh = new TwoDTexQuad("romfs:/texture/bg_l.png");
+    setTwoDColorQuadPosAndScale(bgLMesh, -41, 0, 727, 727);
+    bgLMesh->posZ = 0.11f;
+    bgRMesh = new TwoDTexQuad("romfs:/texture/bg_r.png");
+    setTwoDColorQuadPosAndScale(bgRMesh, 594, 0, 727, 727);
+    bgRMesh->posZ = 0.11f;
     notAlreadyLoadROMBg = new TwoDTexQuad("romfs:/texture/snesnx2005.png");
     s9xRenderer = new TwoDDynamicTexQuad();
+    setTwoDColorQuadPosAndScale(s9xRenderer, 201, 0, 877, 678);
     notAlreadyLoadROMBg->posZ = 0.1f;
     s9xRenderer->posZ = 0.1f;
 }
@@ -146,6 +153,8 @@ void S9XRunMenu::run1Fr(unsigned int joyD, unsigned int joyU, unsigned int joyH)
     if(joyU & (1 << JOY_PLUS))s9xInput &= (0xFFFFFFFF ^ (1 << 12));
 
     runS9X1Fr();
+    bgLMesh->run1Fr(0.0f);
+    bgRMesh->run1Fr(0.0f);
     s9xRenderer->run1Fr(0.0f);
 }
 
@@ -159,11 +168,15 @@ void S9XRunMenu::s9XRunMenuRender(void){
         notAlreadyLoadROMBg->render();
         return;
     }
+    bgLMesh->render();
+    bgRMesh->render();
     s9xRenderer->render();
 }
 
 S9XRunMenu::~S9XRunMenu(void){
     delete notAlreadyLoadROMBg;
+    delete bgLMesh;
+    delete bgRMesh;
     delete s9xRenderer;
 }
 
@@ -268,6 +281,8 @@ void MainMenu::run1Fr(unsigned int joyD, unsigned int joyU, unsigned int joyH){
         if(curItemindex > 0)curItemindex--;
     }
     notAlreadyLoadROMBg->run1Fr(0.0f);
+    bgLMesh->run1Fr(0.0f);
+    bgRMesh->run1Fr(0.0f);
     s9xRenderer->run1Fr(0.0f);
     bokashiDarkQuad->run1Fr(0.0f);
     whiteQuad->posY = ((((curItemindex * 48 + 165) / (float)SCREEN_H) + (48 / (float)SCREEN_H) / 2) * -2.0f) + 1.0f;
@@ -410,6 +425,8 @@ void StateSave::run1Fr(unsigned int joyD, unsigned int jpyU, unsigned int joyH){
     unsigned int mainMenuSelectndex = 1;
     if(isSave)mainMenuSelectndex = 2;
     notAlreadyLoadROMBg->run1Fr(0.0f);
+    bgLMesh->run1Fr(0.0f);
+    bgRMesh->run1Fr(0.0f);
     s9xRenderer->run1Fr(0.0f);
     bokashiDarkQuad->run1Fr(0.0f);
     whiteQuad->posY = ((((mainMenuSelectndex * 48 + 165) / (float)SCREEN_H) + (48 / (float)SCREEN_H) / 2) * -2.0f) + 1.0f;
@@ -589,6 +606,8 @@ void ROMLoadMenu::run1Fr(unsigned int joyD, unsigned int jpyU, unsigned int joyH
         if(page != pagePrev)updateTextures();
     }
     notAlreadyLoadROMBg->run1Fr(0.0f);
+    bgLMesh->run1Fr(0.0f);
+    bgRMesh->run1Fr(0.0f);
     s9xRenderer->run1Fr(0.0f);
     bokashiDarkQuad->run1Fr(0.0f);
     whiteQuad->posY = ((((4 * 48 + 165) / (float)SCREEN_H) + (48 / (float)SCREEN_H) / 2) * -2.0f) + 1.0f;
