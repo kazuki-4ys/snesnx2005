@@ -131,7 +131,11 @@ void getStringWidth(FT_Face face, unsigned int *u32Text, unsigned int *size){
     unsigned int curIndex = 0;
     while(u32Text[curIndex] != '\0'){
         FT_Bitmap bitmap;
-        FT_Load_Char(face, u32Text[curIndex], FT_LOAD_RENDER);
+        if(u32Text[curIndex] == ' '){
+            FT_Load_Char(face, 'A', FT_LOAD_RENDER);//半角英数のスペースは横幅がほぼ0になるので変わりにAの横幅を使用
+        }else{
+            FT_Load_Char(face, u32Text[curIndex], FT_LOAD_RENDER);
+        }
         bitmap = face->glyph->bitmap;
         dest += bitmap.width;
         if(maxHeight < bitmap.rows)maxHeight = bitmap.rows;
@@ -166,7 +170,11 @@ void TextMesh::setText(string aText){
     unsigned char *curTargetPixel;
     FT_Bitmap bitmap;
     while(u32Text[curIndex] != '\0'){
-        FT_Load_Char(face, u32Text[curIndex], FT_LOAD_RENDER);
+        if(u32Text[curIndex] == ' '){
+            FT_Load_Char(face, 'A', FT_LOAD_RENDER);//半角英数のスペースは横幅がほぼ0になるので変わりにAの横幅を使用
+        }else{
+            FT_Load_Char(face, u32Text[curIndex], FT_LOAD_RENDER);
+        }
         bitmap = face->glyph->bitmap;
         for(unsigned int y = 0;y < bitmap.rows;y++){
             //if((y - face->glyph->bitmap_top) < 0)continue;
@@ -179,7 +187,11 @@ void TextMesh::setText(string aText){
                 *(curTargetPixel + 0) = (color >> 24) & 0xFF;
                 *(curTargetPixel + 1) = (color >> 16) & 0xFF;
                 *(curTargetPixel + 2) = (color >> 8) & 0xFF;
-                *(curTargetPixel + 3) = (unsigned char)(((color & 0xFF) * (srcPixel / 255.0f)) + 0.4999f);
+                if(u32Text[curIndex] == ' '){
+                    *(curTargetPixel + 3) = 0;
+                }else{
+                    *(curTargetPixel + 3) = (unsigned char)(((color & 0xFF) * (srcPixel / 255.0f)) + 0.4999f);
+                }
             }
         }
         curCharX += bitmap.width;

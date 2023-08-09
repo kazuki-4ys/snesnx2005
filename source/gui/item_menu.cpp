@@ -195,7 +195,7 @@ MainMenu::MainMenu(App *a, unsigned char *aTtfFont, unsigned int aTtfFontSize) :
     setTwoDColorQuadScale(VerticalLine, 1, 666);
     VerticalLine->posX = ((652 / (float)SCREEN_W) + (1 / (float)SCREEN_W) / 2) * 2.0f - 1.0f;
     VerticalLine->posY = (((27 / (float)SCREEN_H) + (666 / (float)SCREEN_H) / 2) * -2.0f) + 1.0f;
-    string menuStrings[] = {"Resume", "Load state", "Save state", "Reset", "Select ROM", "Exit"};
+    string menuStrings[] = {"Resume", "Load State", "Save State", "Reset", "Select ROM", "Exit"};
     if(ttfFont){
         for(unsigned int i = 0;i < MAIN_MENU_ITEM_COUNT;i++){
             menuTextMesh[i * 2 + 1] = new TextMesh(ttfFont, ttfFontSize, 25, menuStrings[i], 0xFF0000FF);
